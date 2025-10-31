@@ -279,11 +279,33 @@ public class Ejercicios {
     public void ejercicio15(){
         entradaDatos=new Scanner(System.in);
         System.out.println("Introduce el peso del paquete en kg");
-        int edad= entradaDatos.nextInt();
+        int peso= entradaDatos.nextInt();
         System.out.println("Introduce la distancia en envio en km");
-        int ingresosMensuales= entradaDatos.nextInt();
-        System.out.println("Introduce si tienes deudas o no (True/False)");
-        boolean deudas=entradaDatos.nextBoolean();
+        int distancia= entradaDatos.nextInt();
+        System.out.println("¿Envío urgente?(True/False)");
+        boolean urgente=entradaDatos.nextBoolean();
+        double precio=5.0;
+        System.out.println("El precio base es: "+precio+"$");
+        System.out.println("El peso del paquete es: " + peso + "kg"+" (excede en "+(peso-2)+"kg los 2 kg");
+        if (peso>5) {
+            int costeAdicionalPeso=4;
+            System.out.println("Coste adicional por peso "+costeAdicionalPeso+"$");
+            precio+=costeAdicionalPeso;
+        }
+        System.out.println("La distancia es de "+distancia+"(mayor de 100km)");
+        if (distancia>100){
+            double costeAdicionalDistancia= 10;
+            System.out.println("Coste adicional por distancia "+costeAdicionalDistancia+"$");
+            precio+=costeAdicionalDistancia;
+        }
+        System.out.println("Subtutal: "+ precio+"$");
+        System.out.println("¿El envio es urgente? " +urgente);
+        if (urgente){
+            double costeUrgencia= precio*1.5;
+            System.out.println("Recargo por urgencia x 1.5: "+costeUrgencia+"$");
+            precio+=costeUrgencia;
+        }
+        System.out.println("Coste total del envio: "+precio+"$");
     }
 }
 
