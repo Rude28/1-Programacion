@@ -23,7 +23,4 @@ public class Main {
         cosa= 5;
         cosa= "Cosa";
         final String NUMERO_DNI= "1212121A";
-
-
-
 }
