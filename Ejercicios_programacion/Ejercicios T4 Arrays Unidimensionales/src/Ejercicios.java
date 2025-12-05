@@ -118,7 +118,8 @@ public class Ejercicios {
         int alumnos= entradaDatos.nextInt();
         double[] notas=new double[alumnos];
         for (int i = 0; i < alumnos; i++) {
-            System.out.println("Introduce las notas de el alumno");
+            System.out.println("Introduce las notas de el alumno");//hay que introducir el dato con coma
+            System.out.println("Ejemplo 7,5");
             notas[i]=entradaDatos.nextDouble();
         }
         System.out.println("--- REPORTE DE NOTAS ---");
@@ -137,7 +138,7 @@ public class Ejercicios {
                 aprobados++;
             }
         }
-        System.out.println("El numero de aparobados es "+ aprobados);
+        System.out.println("El numero de aprobados es "+ aprobados);
         double mayor=0;
         double menor=1000;
         for (int i = 0; i < notas.length; i++) {
