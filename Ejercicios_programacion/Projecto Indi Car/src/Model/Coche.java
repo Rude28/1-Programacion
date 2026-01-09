@@ -12,5 +12,6 @@ public class Coche {
     private int kilometrosRecorridosCoche;
     private int puntos;
     private int mejorVuelta;
+    private String marca;
 }
 

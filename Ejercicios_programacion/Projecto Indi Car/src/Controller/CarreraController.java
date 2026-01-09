@@ -21,22 +21,23 @@ public class CarreraController {
             for (int i = 0; i < carrera.getListaCoches().size(); i++) {
                 int kmCoche = carrera.getListaCoches().get(i).getKilometrosRecorridosCoche();
                 int kmAniadidos = (int) (Math.random() * 31) + 20;
+                carrera.getListaCoches().get(i).setMejorVuelta(acumularVuelta(kmAniadidos));
                 kmAniadidos += kmCoche;
                 carrera.getListaCoches().get(i).setKilometrosRecorridosCoche(kmAniadidos);
-                if (carrera.getKilometrosCarrera() <= carrera.getListaCoches().get(i).getKilometrosRecorridosCoche()) {
+                if (kmCarrera <= carrera.getListaCoches().get(i).getKilometrosRecorridosCoche()) {
                     terminarCarrea = true;
                 }
             }
         }
     }
-    private void ordenarPilotosKilometros(Carrera carrera){
-        carrera.getListaCoches().sort(Comparator.comparingInt(Coche::getKilometrosRecorridosCoche).reversed());
-    }
     public void darPuntos(Carrera carrera){
         int puntos=10;
+        int puntosCoche=0;
         ordenarPilotosKilometros(carrera);
         for (int i = 0; i < carrera.getListaCoches().size() && i<3; i++) {
-            carrera.getListaCoches().get(i).setPuntos(puntos);
+            puntosCoche=getCarrera().getListaCoches().get(i).getPuntos();
+            puntosCoche+=puntos;
+            carrera.getListaCoches().get(i).setPuntos(puntosCoche);
             puntos-=2;
         }
     }
@@ -46,14 +47,18 @@ public class CarreraController {
         }
     }
     public void clasificacionGeneral(){
-        System.out.println("Si quieres ver la clasificacion de la carrera pulsa 1");
-        System.out.println("Si quieres ver la clasificacion general pulsa 2");
-        System.out.println("si quieres saltar a la siguiente carrera pulsa 3");
         Scanner scanner=new Scanner(System.in);
-        int numeroEntrada=scanner.nextInt();
+        int numeroEntrada=0;
+        do {
+        System.out.println("================== MENÚ DEL CAMPEONATO ==================");
+        System.out.println("= Si quieres ver la clasificacion de la carrera pulsa 1 =");
+        System.out.println("==== Si quieres ver la clasificacion general pulsa 2 ====");
+        System.out.println("==== Si quieres saltar a la siguiente carrera pula 3 ====");
         int puntos=10;
+        numeroEntrada=scanner.nextInt();
         switch (numeroEntrada){
             case 1-> {
+                System.out.println("================ Clasificaición carrera =================");
                 for (int i = 0; i < carrera.getListaCoches().size(); i++) {
                     if (i < 3) {
                         System.out.println("El coche de "+carrera.getListaCoches().get(i).getNombreCoche()+
@@ -65,31 +70,109 @@ public class CarreraController {
                                 " ha recorrido " + carrera.getListaCoches().get(i).getKilometrosRecorridosCoche());
                     }
                 }
+                System.out.println(" ");
+
             }
             case 2-> {
                 ordenarPilotosPuntos(carrera);
+                System.out.println("========== Clasificacion general del campeonato ==========");
+
                 for (int i = 0; i < carrera.getListaCoches().size(); i++) {
                     System.out.println("El "+(i+1)+
                             " del campeonato es "+carrera.getListaCoches().get(i).getNombreCoche()+
-                            "Con los puntos: " +carrera.getListaCoches().get(i).getPuntos());
+                            " con los puntos: " +carrera.getListaCoches().get(i).getPuntos());
                 }
+                System.out.println(" ");
+
             }
-            case 3->{}
+            case 3->{
+                System.out.println("Saliendo de la carrera");
+            }
+            default -> {
+                System.out.println("El numero introducido debe ser 1 2 o 3");
+                System.out.println("  ");
+            }
+
         }
+        }while (numeroEntrada!=3);
 
     }
-private void ordenarPilotosPuntos(Carrera carrera){
+    public void clasificacionFinal(){
+        System.out.println("=========== Clasificacion final del campeonato ===========");
+        for (int i = 0; i < carrera.getListaCoches().size(); i++) {
+            ordenarPilotosPuntos(carrera);
+            compararEmpatesPuntos(carrera);
+            System.out.println("El "+(i+1)+" del campeonato es "+carrera.getListaCoches().get(i).getNombreCoche()+
+                    " con los puntos: "+carrera.getListaCoches().get(i).getPuntos());
+        }
+    }
+    private int acumularVuelta(int kmRecorridos){
+        int mejorkm=0;
+        if (mejorkm>kmRecorridos){
+            mejorkm=kmRecorridos;
+        }
+        return mejorkm;
+    }
+    private void ordenarPilotosKilometros(Carrera carrera){
+        carrera.getListaCoches().sort(Comparator.comparingInt(Coche::getKilometrosRecorridosCoche).reversed());
+        compararEmpatesKilometros(carrera);
+    }
+    private ArrayList compararEmpatesKilometros(Carrera carrera){
+        int i=0;
+        while (i< carrera.getListaCoches().size()) {
+            ArrayList<Coche> bloqueComparado = new ArrayList<>();
+            Coche cocheComparado = carrera.getListaCoches().get(i);
+            bloqueComparado.add(cocheComparado);
+            int kmActual = carrera.getListaCoches().get(i).getKilometrosRecorridosCoche();
+            int j = i + 1;
+            while (j < carrera.getListaCoches().size() &&
+                    kmActual == carrera.getListaCoches().get(j).getKilometrosRecorridosCoche()) {
+                if (bloqueComparado.size() > 1) {
+                    bloqueComparado.sort(
+                            Comparator.comparingDouble(Coche::getMejorVuelta)
+                    );
+                    System.out.println(
+                            "Hay un empate entre coches con " + kmActual +
+                                    " km. Se decide por la mejor vuelta."
+                    );
+                    for (int k = 0; k < bloqueComparado.size(); k++) {
+                        carrera.getListaCoches().set(i + k, bloqueComparado.get(k));
+                    }
+                }
+            }
+            i=j;
+        }
+        return carrera.getListaCoches();
+    }
+    private void ordenarPilotosPuntos(Carrera carrera){
         carrera.getListaCoches().sort(Comparator.comparingInt(Coche::getPuntos).reversed());
 }
-public void clasificacionFinal(){
-    //Arreglar clasificacion final
-    ordenarPilotosPuntos(carrera);
-    System.out.print("--- Clasificación final --- \n");
-    ArrayList<Coche> lista2Coches=new ArrayList<>();
-    ordenarPilotosKilometros(carrera);
-    for (int i = 0; i < carrera.getListaCoches().size(); i++) {
-        System.out.println("El "+(i+1)+" del campeonato es "+carrera.getListaCoches().get(i).getNombreCoche()+
-                "Con los puntos: "+carrera.getListaCoches().get(i).getPuntos());
+
+    private ArrayList compararEmpatesPuntos(Carrera carrera){
+        int i=0;
+        while (i< carrera.getListaCoches().size()) {
+            ArrayList<Coche> bloqueComparado = new ArrayList<>();
+            Coche cocheComparado = carrera.getListaCoches().get(i);
+            bloqueComparado.add(cocheComparado);
+            int puntosActual = carrera.getListaCoches().get(i).getPuntos();
+            int j = i + 1;
+            while (j < carrera.getListaCoches().size() &&
+                    puntosActual == carrera.getListaCoches().get(j).getPuntos()) {
+                if (bloqueComparado.size() > 1) {
+                    bloqueComparado.sort(
+                            Comparator.comparingDouble(Coche::getMejorVuelta)
+                    );
+                    System.out.println(
+                            "Hay un empate entre coches con " + puntosActual +
+                                    " km. Se decide por la mejor vuelta final."
+                    );
+                    for (int k = 0; k < bloqueComparado.size(); k++) {
+                        carrera.getListaCoches().set(i + k, bloqueComparado.get(k));
+                    }
+                }
+            }
+            i=j;
+        }
+        return carrera.getListaCoches();
     }
-}
 }

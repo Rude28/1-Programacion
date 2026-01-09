@@ -1,40 +1,56 @@
 import Controller.CampeonatoController;
-import Controller.CarreraController;
 import Model.Campeonato;
 import Model.Carrera;
 import Model.Coche;
+import lombok.SneakyThrows;
+
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Vamos a crear un campeonato");
+    public static void main(String[] args) throws InterruptedException {
+
+        System.out.println("Bienvenido al creador de campeonatos");
         ArrayList<Coche> listaCoches=new ArrayList<>();
         Scanner addDatos=new Scanner(System.in);
-        System.out.println("Introduce el número de coches que vamos a crear");
+        System.out.println("Por favor, introduce el número de coches que va a tener el campeonato");
         while(!addDatos.hasNextInt()){
             System.out.println("Eso no es un número entero. Inténtalo de nuevo");
             addDatos.next();
         }
         int addEnteros=addDatos.nextInt();
+        while (addEnteros<3){
+            System.out.println("Introduce más coches, necesitamos porlomenos tres");
+            addEnteros=addDatos.nextInt();
+        }
+        System.out.println("________________________________________");
         addDatos.nextLine();
         for (int i = 0; i < addEnteros; i++) {
-            System.out.println("Dime el nombre del piloto del coche"+(i+1));
+            System.out.println("Porfavor, dime el nombre del piloto del coche "+(i+1));
             String nombreCoche = addDatos.nextLine();
-            Coche coche = new Coche(nombreCoche, i+1, 0, 0, 0);
+            System.out.println("Porfavor, dime el nombre de la marca del coche "+(i+1));
+            String marca = addDatos.nextLine();
+            Coche coche = new Coche(nombreCoche, i+1, 0, 0, 0, marca);
             listaCoches.add(coche);
-            System.out.println("Coche añadido");
+            System.out.println("Exito, coche añadido");
+            System.out.println(" ");
         }
-        System.out.println("Dime el numero de carreras que hay en el campeonato");
-        while(!addDatos.hasNextInt()){
+        System.out.println("________________________________________");
+        System.out.println("Introduce el numero de carreras que vamos a crear");
+        while(!addDatos.hasNextInt()) {
             System.out.println("Eso no es un número entero. Inténtalo de nuevo");
             addDatos.next();
         }
-        System.out.println("Introduce el numero de carreras que vamos a crear");
-        addEnteros=addDatos.nextInt();
+        int addNumeroCarreras=addDatos.nextInt();
+        while (addNumeroCarreras<=1){
+            System.out.println("Introduce más carreras, necesitamos porlomenos dos");
+            addNumeroCarreras=addDatos.nextInt();
+        }
         addDatos.nextLine();
         ArrayList<Carrera> listaCarreras=new ArrayList<>();
-        for (int i = 0; i < addEnteros; i++) {
+        System.out.println(" ");
+        for (int i = 0; i < addNumeroCarreras; i++) {
             System.out.printf("Dime el nombre de la carrera %d%n",i+1);
             String nombreCarrera= addDatos.nextLine();
             System.out.println("Dime los km de la carrera");
@@ -43,13 +59,21 @@ public class Main {
                 addDatos.next();
             }
             int kilometrosCarreras=addDatos.nextInt();
+            while (kilometrosCarreras<3){
+                System.out.println("Introduce más kilometros, necesitamos porlomenos 100 para que se pueda correr");
+                kilometrosCarreras=addDatos.nextInt();
+            }
             addDatos.nextLine();
             Carrera carrera=new Carrera(listaCoches, kilometrosCarreras,nombreCarrera);
             listaCarreras.add(carrera);
+            kilometrosCarreras=0;
         }
-        System.out.println("--- Iniciando Campeonato ---");
         Campeonato campeonato=new Campeonato(listaCarreras);
         CampeonatoController campeonatoController=new CampeonatoController(campeonato);
-        campeonatoController.iniciarCampeonato();
+        campeonatoController.retardo();
+        System.out.println("============== Campeonato creado con exito ===============");
+        System.out.println("================ Iniciando el Campeonato =================");
+        campeonatoController.iniciarCampeonato(campeonato);
     }
 }
+
