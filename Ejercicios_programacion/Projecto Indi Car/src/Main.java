@@ -2,9 +2,6 @@ import Controller.CampeonatoController;
 import Model.Campeonato;
 import Model.Carrera;
 import Model.Coche;
-import lombok.SneakyThrows;
-
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 

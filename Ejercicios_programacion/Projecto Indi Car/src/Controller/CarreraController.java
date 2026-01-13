@@ -10,8 +10,6 @@ import java.util.Scanner;
 @NoArgsConstructor
 public class CarreraController {
     private Carrera carrera;
-    //Constructor
-
     public CarreraController(Carrera carrera) {
         this.carrera=carrera;
     }
@@ -99,16 +97,16 @@ public class CarreraController {
     }
     public void clasificacionFinal(){
         System.out.println("=========== Clasificacion final del campeonato ===========");
+        ordenarPilotosPuntos(carrera);
+        compararEmpatesPuntos(carrera);
         for (int i = 0; i < carrera.getListaCoches().size(); i++) {
-            ordenarPilotosPuntos(carrera);
-            compararEmpatesPuntos(carrera);
             System.out.println("El "+(i+1)+" del campeonato es "+carrera.getListaCoches().get(i).getNombreCoche()+
                     " con los puntos: "+carrera.getListaCoches().get(i).getPuntos());
         }
     }
     private int acumularVuelta(int kmRecorridos){
         int mejorkm=0;
-        if (mejorkm>kmRecorridos){
+        if (mejorkm<kmRecorridos){
             mejorkm=kmRecorridos;
         }
         return mejorkm;
@@ -127,20 +125,22 @@ public class CarreraController {
             int j = i + 1;
             while (j < carrera.getListaCoches().size() &&
                     kmActual == carrera.getListaCoches().get(j).getKilometrosRecorridosCoche()) {
-                if (bloqueComparado.size() > 1) {
-                    bloqueComparado.sort(
-                            Comparator.comparingDouble(Coche::getMejorVuelta)
-                    );
-                    System.out.println(
-                            "Hay un empate entre coches con " + kmActual +
-                                    " km. Se decide por la mejor vuelta."
-                    );
-                    for (int k = 0; k < bloqueComparado.size(); k++) {
-                        carrera.getListaCoches().set(i + k, bloqueComparado.get(k));
-                    }
+                bloqueComparado.add(carrera.getListaCoches().get(j));
+                j++;
+            }
+            if (bloqueComparado.size() > 1) {
+                bloqueComparado.sort(
+                        Comparator.comparingDouble(Coche::getMejorVuelta)
+                );
+                System.out.println(
+                        "Hay un empate entre coches con " + kmActual +
+                                " km. Se decide por la mejor vuelta."
+                );
+                for (int k = 0; k < bloqueComparado.size(); k++) {
+                    carrera.getListaCoches().set(i + k, bloqueComparado.get(k));
                 }
             }
-            i=j;
+            i = j;
         }
         return carrera.getListaCoches();
     }
