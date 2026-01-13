@@ -12,15 +12,22 @@ public class Main {
         ArrayList<Coche> listaCoches=new ArrayList<>();
         Scanner addDatos=new Scanner(System.in);
         System.out.println("Por favor, introduce el número de coches que va a tener el campeonato");
-        while(!addDatos.hasNextInt()){
+
+        while(!addDatos.hasNextInt() ){
             System.out.println("Eso no es un número entero. Inténtalo de nuevo");
             addDatos.next();
         }
         int addEnteros=addDatos.nextInt();
+
         while (addEnteros<3){
-            System.out.println("Introduce más coches, necesitamos porlomenos tres");
+            System.out.println("Introduce más coches, necesitamos por lo menos tres");
+            while(!addDatos.hasNextInt() ){
+                System.out.println("Eso no es un número entero. Inténtalo de nuevo");
+                addDatos.next();
+            }
             addEnteros=addDatos.nextInt();
         }
+
         System.out.println("________________________________________");
         addDatos.nextLine();
         for (int i = 0; i < addEnteros; i++) {
@@ -41,7 +48,11 @@ public class Main {
         }
         int addNumeroCarreras=addDatos.nextInt();
         while (addNumeroCarreras<=1){
-            System.out.println("Introduce más carreras, necesitamos porlomenos dos");
+            System.out.println("Introduce más carreras, necesitamos por lo menos dos");
+            while(!addDatos.hasNextInt()) {
+                System.out.println("Eso no es un número entero. Inténtalo de nuevo");
+                addDatos.next();
+            }
             addNumeroCarreras=addDatos.nextInt();
         }
         addDatos.nextLine();
@@ -56,8 +67,12 @@ public class Main {
                 addDatos.next();
             }
             int kilometrosCarreras=addDatos.nextInt();
-            while (kilometrosCarreras<3){
-                System.out.println("Introduce más kilometros, necesitamos porlomenos 100 para que se pueda correr");
+            while (kilometrosCarreras<100){
+                System.out.println("Introduce más kilometros, necesitamos por lo menos 100 para que se pueda correr");
+                while(!addDatos.hasNextInt()) {
+                    System.out.println("Eso no es un número entero. Inténtalo de nuevo");
+                    addDatos.next();
+                }
                 kilometrosCarreras=addDatos.nextInt();
             }
             addDatos.nextLine();

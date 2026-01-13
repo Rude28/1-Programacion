@@ -4,7 +4,6 @@ import Model.Coche;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 @Data
 @NoArgsConstructor
@@ -45,7 +44,7 @@ public class CarreraController {
         }
     }
     public void clasificacionGeneral(){
-        Scanner scanner=new Scanner(System.in);
+        Scanner addDatos=new Scanner(System.in);
         int numeroEntrada=0;
         do {
         System.out.println("================== MENÚ DEL CAMPEONATO ==================");
@@ -53,7 +52,12 @@ public class CarreraController {
         System.out.println("==== Si quieres ver la clasificacion general pulsa 2 ====");
         System.out.println("==== Si quieres saltar a la siguiente carrera pula 3 ====");
         int puntos=10;
-        numeroEntrada=scanner.nextInt();
+        while(!addDatos.hasNextInt()){
+            System.out.println("Eso no es un número entero. Inténtalo de nuevo");
+            addDatos.next();
+        }
+        int addEnteros=addDatos.nextInt();
+        //Meter autentificador de entrada
         switch (numeroEntrada){
             case 1-> {
                 System.out.println("================ Clasificaición carrera =================");
@@ -83,22 +87,20 @@ public class CarreraController {
                 System.out.println(" ");
 
             }
-            case 3->{
+            case 3->
                 System.out.println("Saliendo de la carrera");
-            }
+
             default -> {
                 System.out.println("El numero introducido debe ser 1 2 o 3");
                 System.out.println("  ");
             }
 
         }
-        }while (numeroEntrada!=3);
-
+        } while (numeroEntrada!=3);
     }
     public void clasificacionFinal(){
         System.out.println("=========== Clasificacion final del campeonato ===========");
         ordenarPilotosPuntos(carrera);
-        compararEmpatesPuntos(carrera);
         for (int i = 0; i < carrera.getListaCoches().size(); i++) {
             System.out.println("El "+(i+1)+" del campeonato es "+carrera.getListaCoches().get(i).getNombreCoche()+
                     " con los puntos: "+carrera.getListaCoches().get(i).getPuntos());
@@ -111,67 +113,58 @@ public class CarreraController {
         }
         return mejorkm;
     }
-    private void ordenarPilotosKilometros(Carrera carrera){
-        carrera.getListaCoches().sort(Comparator.comparingInt(Coche::getKilometrosRecorridosCoche).reversed());
-        compararEmpatesKilometros(carrera);
-    }
-    private ArrayList compararEmpatesKilometros(Carrera carrera){
-        int i=0;
-        while (i< carrera.getListaCoches().size()) {
-            ArrayList<Coche> bloqueComparado = new ArrayList<>();
-            Coche cocheComparado = carrera.getListaCoches().get(i);
-            bloqueComparado.add(cocheComparado);
-            int kmActual = carrera.getListaCoches().get(i).getKilometrosRecorridosCoche();
-            int j = i + 1;
-            while (j < carrera.getListaCoches().size() &&
-                    kmActual == carrera.getListaCoches().get(j).getKilometrosRecorridosCoche()) {
-                bloqueComparado.add(carrera.getListaCoches().get(j));
-                j++;
-            }
-            if (bloqueComparado.size() > 1) {
-                bloqueComparado.sort(
-                        Comparator.comparingDouble(Coche::getMejorVuelta)
-                );
-                System.out.println(
-                        "Hay un empate entre coches con " + kmActual +
-                                " km. Se decide por la mejor vuelta."
-                );
-                for (int k = 0; k < bloqueComparado.size(); k++) {
-                    carrera.getListaCoches().set(i + k, bloqueComparado.get(k));
+
+    private ArrayList ordenarPilotosKilometros(Carrera carrera){
+
+        for (int i = 0; i < carrera.getListaCoches().size()-1; i++) {
+            for (int j = 0; j < carrera.getListaCoches().size()-1 -i; j++) {
+                int puntosActual= carrera.getListaCoches().get(j).getKilometrosRecorridosCoche();
+                int puntosSiguiente=carrera.getListaCoches().get(j+1).getKilometrosRecorridosCoche();
+                boolean intercambio=false;
+                if (puntosActual<puntosSiguiente){
+                    intercambio=true;
+                } else if (puntosActual==puntosSiguiente) {
+                    int masKilometros=carrera.getListaCoches().get(j).getKilometrosRecorridosCoche();
+                    int menKilomentros=carrera.getListaCoches().get(j+1).getKilometrosRecorridosCoche();
+                    if (masKilometros>menKilomentros){
+                        intercambio=true;
+                    }
+                    System.out.println("Hay un empate de puntos, el mejor se decide por la mejor vuelta");
+                }
+
+                if (intercambio) {
+                    Coche auxiliar=carrera.getListaCoches().get(j);
+                    carrera.getListaCoches().set(j,carrera.getListaCoches().get(j + 1));
+                    carrera.getListaCoches().set(j+1,auxiliar);
                 }
             }
-            i = j;
         }
         return carrera.getListaCoches();
     }
-    private void ordenarPilotosPuntos(Carrera carrera){
-        carrera.getListaCoches().sort(Comparator.comparingInt(Coche::getPuntos).reversed());
-}
 
-    private ArrayList compararEmpatesPuntos(Carrera carrera){
-        int i=0;
-        while (i< carrera.getListaCoches().size()) {
-            ArrayList<Coche> bloqueComparado = new ArrayList<>();
-            Coche cocheComparado = carrera.getListaCoches().get(i);
-            bloqueComparado.add(cocheComparado);
-            int puntosActual = carrera.getListaCoches().get(i).getPuntos();
-            int j = i + 1;
-            while (j < carrera.getListaCoches().size() &&
-                    puntosActual == carrera.getListaCoches().get(j).getPuntos()) {
-                if (bloqueComparado.size() > 1) {
-                    bloqueComparado.sort(
-                            Comparator.comparingDouble(Coche::getMejorVuelta)
-                    );
-                    System.out.println(
-                            "Hay un empate entre coches con " + puntosActual +
-                                    " km. Se decide por la mejor vuelta final."
-                    );
-                    for (int k = 0; k < bloqueComparado.size(); k++) {
-                        carrera.getListaCoches().set(i + k, bloqueComparado.get(k));
+    private ArrayList ordenarPilotosPuntos(Carrera carrera){
+        for (int i = 0; i < carrera.getListaCoches().size()-1; i++) {
+            for (int j = 0; j < carrera.getListaCoches().size()-1 -i; j++) {
+                int puntosActual= carrera.getListaCoches().get(j).getPuntos();
+                int puntosSiguiente=carrera.getListaCoches().get(j+1).getPuntos();
+                boolean intercambio=false;
+                if (puntosActual<puntosSiguiente){
+                    intercambio=true;
+                } else if (puntosActual==puntosSiguiente) {
+                    int masKilometros=carrera.getListaCoches().get(j).getKilometrosRecorridosCoche();
+                    int menKilomentros=carrera.getListaCoches().get(j+1).getKilometrosRecorridosCoche();
+                    if (masKilometros>menKilomentros){
+                        intercambio=true;
                     }
+                    System.out.println("Hay un empate de puntos, el mejor se decide por la mejor vuelta");
+                }
+
+                if (intercambio) {
+                    Coche auxiliar=carrera.getListaCoches().get(j);
+                    carrera.getListaCoches().set(j,carrera.getListaCoches().get(j + 1));
+                    carrera.getListaCoches().set(j+1,auxiliar);
                 }
             }
-            i=j;
         }
         return carrera.getListaCoches();
     }
