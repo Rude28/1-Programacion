@@ -27,6 +27,7 @@ public class CarreraController {
             }
         }
     }
+
     public void darPuntos(Carrera carrera){
         int puntos=10;
         int puntosCoche=0;
@@ -38,11 +39,13 @@ public class CarreraController {
             puntos-=2;
         }
     }
+
     public void kmZero(){
         for (int i = 0; i < carrera.getListaCoches().size(); i++) {
             carrera.getListaCoches().get(i).setKilometrosRecorridosCoche(0);
         }
     }
+
     public void clasificacionGeneral(){
         Scanner addDatos=new Scanner(System.in);
         int numeroEntrada=0;
@@ -56,8 +59,7 @@ public class CarreraController {
             System.out.println("Eso no es un número entero. Inténtalo de nuevo");
             addDatos.next();
         }
-        int addEnteros=addDatos.nextInt();
-        //Meter autentificador de entrada
+        numeroEntrada=addDatos.nextInt();
         switch (numeroEntrada){
             case 1-> {
                 System.out.println("================ Clasificaición carrera =================");
@@ -98,6 +100,7 @@ public class CarreraController {
         }
         } while (numeroEntrada!=3);
     }
+
     public void clasificacionFinal(){
         System.out.println("=========== Clasificacion final del campeonato ===========");
         ordenarPilotosPuntos(carrera);
@@ -106,6 +109,7 @@ public class CarreraController {
                     " con los puntos: "+carrera.getListaCoches().get(i).getPuntos());
         }
     }
+
     private int acumularVuelta(int kmRecorridos){
         int mejorkm=0;
         if (mejorkm<kmRecorridos){
@@ -129,7 +133,7 @@ public class CarreraController {
                     if (masKilometros>menKilomentros){
                         intercambio=true;
                     }
-                    System.out.println("Hay un empate de puntos, el mejor se decide por la mejor vuelta");
+                    System.out.println("Hay un empate de kilomtros, el mejor se decide por la mejor vuelta");
                 }
 
                 if (intercambio) {

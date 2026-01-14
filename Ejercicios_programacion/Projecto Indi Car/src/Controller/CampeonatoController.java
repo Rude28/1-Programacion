@@ -14,8 +14,8 @@ private Campeonato campeonato;
     }
     public void iniciarCampeonato(Campeonato campeonato){
         int i=0;
-        CarreraController carreraController=new CarreraController(campeonato.getListaCarreras().get(i));
         for ( i = 0; i <campeonato.getListaCarreras().size(); i++) {
+            CarreraController carreraController=new CarreraController(campeonato.getListaCarreras().get(i));
             int kmCarrera=campeonato.getListaCarreras().get(i).getKilometrosCarrera();
             carreraController.simuladorCarrera(kmCarrera);
             carreraController.darPuntos(campeonato.getListaCarreras().get(i));
@@ -24,8 +24,10 @@ private Campeonato campeonato;
             carreraController.clasificacionGeneral();
             carreraController.kmZero();
             retardo();
+            if (campeonato.getListaCarreras().size() -1 == i) {
+                carreraController.clasificacionFinal();
+            }
         }
-        carreraController.clasificacionFinal();
     }
     public void retardo(){
         try {

@@ -12,19 +12,12 @@ public class Main {
         ArrayList<Coche> listaCoches=new ArrayList<>();
         Scanner addDatos=new Scanner(System.in);
         System.out.println("Por favor, introduce el número de coches que va a tener el campeonato");
+        comprobarEntero(addDatos);
 
-        while(!addDatos.hasNextInt() ){
-            System.out.println("Eso no es un número entero. Inténtalo de nuevo");
-            addDatos.next();
-        }
         int addEnteros=addDatos.nextInt();
-
         while (addEnteros<3){
             System.out.println("Introduce más coches, necesitamos por lo menos tres");
-            while(!addDatos.hasNextInt() ){
-                System.out.println("Eso no es un número entero. Inténtalo de nuevo");
-                addDatos.next();
-            }
+            comprobarEntero(addDatos);
             addEnteros=addDatos.nextInt();
         }
 
@@ -42,17 +35,13 @@ public class Main {
         }
         System.out.println("________________________________________");
         System.out.println("Introduce el numero de carreras que vamos a crear");
-        while(!addDatos.hasNextInt()) {
-            System.out.println("Eso no es un número entero. Inténtalo de nuevo");
-            addDatos.next();
-        }
+
+        comprobarEntero(addDatos);
+
         int addNumeroCarreras=addDatos.nextInt();
         while (addNumeroCarreras<=1){
             System.out.println("Introduce más carreras, necesitamos por lo menos dos");
-            while(!addDatos.hasNextInt()) {
-                System.out.println("Eso no es un número entero. Inténtalo de nuevo");
-                addDatos.next();
-            }
+            comprobarEntero(addDatos);
             addNumeroCarreras=addDatos.nextInt();
         }
         addDatos.nextLine();
@@ -62,17 +51,11 @@ public class Main {
             System.out.printf("Dime el nombre de la carrera %d%n",i+1);
             String nombreCarrera= addDatos.nextLine();
             System.out.println("Dime los km de la carrera");
-            while(!addDatos.hasNextInt()) {
-                System.out.println("Eso no es un número entero. Inténtalo de nuevo");
-                addDatos.next();
-            }
+            comprobarEntero(addDatos);
             int kilometrosCarreras=addDatos.nextInt();
             while (kilometrosCarreras<100){
                 System.out.println("Introduce más kilometros, necesitamos por lo menos 100 para que se pueda correr");
-                while(!addDatos.hasNextInt()) {
-                    System.out.println("Eso no es un número entero. Inténtalo de nuevo");
-                    addDatos.next();
-                }
+                comprobarEntero(addDatos);
                 kilometrosCarreras=addDatos.nextInt();
             }
             addDatos.nextLine();
@@ -86,6 +69,13 @@ public class Main {
         System.out.println("============== Campeonato creado con exito ===============");
         System.out.println("================ Iniciando el Campeonato =================");
         campeonatoController.iniciarCampeonato(campeonato);
+    }
+
+     static void comprobarEntero(Scanner addEntero){
+        while(!addEntero.hasNextInt()){
+            System.out.println("Eso no es un número entero. Inténtalo de nuevo");
+            addEntero.next();
+        }
     }
 }
 
