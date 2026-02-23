@@ -1,0 +1,18 @@
+Esto es un ejemplo de lecctura de ficheros
+Esto es otra línea en el fichero
+Dps tipos de flujo:
+    Entrantes: lectura->obtengo el contenido
+    Salientes: escrituras-> saco el contenido
+
+    File es la classe principal-> es una carpeta(directorio/file)
+        si es fichero ->createNewFile()
+        si es carpeta -> mkdir(la ruta existe) // mkdirs(la ruta no existe osea la carpeta anterior no esta creada)
+
+Texto plano-> .txt->ascii
+
+Lectura flujo
+    File->ponlo en modo lectura File reeder(de caracter a caracter ) Bufferreader de linea en linea
+
+Escritura
+    File-> ponerlo en modo escritura File writer(caracter a caracter con saltos de línea /n) Bufferwriter
+    (podemos ponerlo manualmente)
