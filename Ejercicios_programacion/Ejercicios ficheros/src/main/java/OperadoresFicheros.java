@@ -156,12 +156,28 @@ public class OperadoresFicheros {
             file.mkdirs();
         }
         FileWriter fileWriter=null;
-        BufferedReader bufferedReader=null;
         try {
             fileWriter= new FileWriter(path);
-            bufferedReader=new BufferedReader(new FileReader(file));
+            fileWriter.write("Nomre, Edad, Calificación");
+            fileWriter.write("Ana garcía, 20, 8.5");
+            fileWriter.write("Carlos Martín, 19, 7.2");
+            fileWriter.write("Laura Pérez, 21, 9.3");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        String scaner=null;
+        try {
+            BufferedReader bufferedReader=new BufferedReader(new FileReader(file));
+            while ((scaner=bufferedReader.readLine())!=null){
+                System.out.println(scaner);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Eerror al leer el documento");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void ejercicio7(){
+
     }
 }
